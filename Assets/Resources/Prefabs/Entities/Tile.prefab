@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1178329288903898232}
   - component: {fileID: 1178329288903898239}
+  - component: {fileID: 1145767427877914785}
+  - component: {fileID: 3947590506068676070}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -68,7 +70,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300060, guid: a18c7335cc6eab4459eb6367bc761101, type: 3}
+  m_Sprite: {fileID: 21300184, guid: a18c7335cc6eab4459eb6367bc761101, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -79,3 +81,63 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &1145767427877914785
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178329288903898238}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.16, y: 0.16}
+    newSize: {x: 0.16, y: 0.16}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.16, y: 0.16}
+  m_EdgeRadius: 0
+--- !u!114 &3947590506068676070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178329288903898238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cabcd51b8941e44c832140b877195e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  x: 0
+  y: 0
+  z: 0
+  isMine: 0
+  isRevealed: 0
+  isFlagged: 0
+  mineChance: 0.03
+  emptySprites:
+  - {fileID: 21300186, guid: a18c7335cc6eab4459eb6367bc761101, type: 3}
+  - {fileID: 21300216, guid: a18c7335cc6eab4459eb6367bc761101, type: 3}
+  - {fileID: 21300218, guid: a18c7335cc6eab4459eb6367bc761101, type: 3}
+  - {fileID: 21300220, guid: a18c7335cc6eab4459eb6367bc761101, type: 3}
+  - {fileID: 21300222, guid: a18c7335cc6eab4459eb6367bc761101, type: 3}
+  - {fileID: 21300224, guid: a18c7335cc6eab4459eb6367bc761101, type: 3}
+  - {fileID: 21300226, guid: a18c7335cc6eab4459eb6367bc761101, type: 3}
+  - {fileID: 21300228, guid: a18c7335cc6eab4459eb6367bc761101, type: 3}
+  - {fileID: 21300230, guid: a18c7335cc6eab4459eb6367bc761101, type: 3}
+  mineSprites:
+  - {fileID: 21300196, guid: a18c7335cc6eab4459eb6367bc761101, type: 3}
+  - {fileID: 21300194, guid: a18c7335cc6eab4459eb6367bc761101, type: 3}
+  flagSprite: {fileID: 21300188, guid: a18c7335cc6eab4459eb6367bc761101, type: 3}
+  rend: {fileID: 1178329288903898239}

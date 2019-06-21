@@ -10,18 +10,19 @@ namespace Minesweeper3D
         public int width = 10, height = 10; // Grid dimensions
         public int mineCount = 5;
         public float spacing = 1.1f; // Spacing between each tile
+
         private Tile[,] tiles; // 3D Array to store all the tiles
-
-        Tile SpawnTile(Vector2 position)
+        // Use this for initialization
+        void Start()
         {
-            // Clone the tile prefab
-            GameObject clone = Instantiate(tilePrefab, transform);
-            // Edit it's properties
-            clone.transform.position = position;
-            // Return the Tile component of clone
-            return clone.GetComponent<Tile>();
+            GenerateTiles();
         }
-
+        // Update is called once per frame
+        void Update()
+        {
+            MouseOver();
+        }
+        // Generates grid of tiles
         void GenerateTiles()
         {
             // Instantiate the new 3D array of size width x height x depth
@@ -55,18 +56,23 @@ namespace Minesweeper3D
                 }
             }
         }
-
-
-        // Use this for initialization
-        void Start()
+        // Spawns a bunch of tiles around a position
+        Tile SpawnTile(Vector2 position)
         {
-            GenerateTiles();
+            // Clone the tile prefab
+            GameObject clone = Instantiate(tilePrefab, transform);
+            // Edit it's properties
+            clone.transform.position = position;
+            // Return the Tile component of clone
+            return clone.GetComponent<Tile>();
         }
+        // Checks if X and Y coordinates are outside range of array
         bool IsOutOfBounds(int x, int y)
         {
             return x < 0 || x >= width ||
                    y < 0 || y >= height;
         }
+        // Counts Adjacent mines around a tile
         int GetAdjacentMineCount(Tile tile)
         {
             // Set count to 0
@@ -98,6 +104,7 @@ namespace Minesweeper3D
             // Remember to return the count!
             return count;
         }
+        // Flood Fill function for revealing adjacent tiles
         void FFuncover(int x, int y, bool[,] visited)
         {
             // Is x and y out of bounds of the grid?
@@ -157,7 +164,7 @@ namespace Minesweeper3D
             return emptyTileCount == 0;
         }
         // Uncovers all mines in the grid
-        void UncoverAllMines()
+        void UncoverAllMines(int mineState = 0)
         {
             // Loop through entire grid
             for (int x = 0; x < width; x++)
@@ -168,8 +175,9 @@ namespace Minesweeper3D
                     // Check if tile is a mine
                     if (tile.isMine)
                     {
+                        int adjacentMines = GetAdjacentMineCount(tile);
                         // Reveal that tile
-                        tile.Reveal();
+                        tile.Reveal(adjacentMines, mineState);
                     }
                 }
             }
@@ -179,12 +187,11 @@ namespace Minesweeper3D
         {
             int adjacentMines = GetAdjacentMineCount(selected);
             selected.Reveal(adjacentMines);
-
             // Is the selected tile a mine?
             if (selected.isMine)
             {
                 // Uncover all mines
-                UncoverAllMines();
+                UncoverAllMines(0);
                 // Game Over - Lose
                 print("Game Over - You loose.");
             }
@@ -200,17 +207,16 @@ namespace Minesweeper3D
             if (NoMoreEmptyTiles())
             {
                 //  Uncover all mines
-                UncoverAllMines();
+                UncoverAllMines(1);
                 // Game Over - Win
                 print("Game Over - You Win!");
             }
         }
-
         Tile GetHitTile(Vector2 mousePosition)
         {
             Ray camRay = Camera.main.ScreenPointToRay(mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(camRay, out hit))
+            RaycastHit2D hit = Physics2D.Raycast(camRay.origin, camRay.direction);
+            if (hit.collider != null)
             {
                 return hit.collider.GetComponent<Tile>();
             }
@@ -219,54 +225,23 @@ namespace Minesweeper3D
         // Raycasts to find a hit tile
         void MouseOver()
         {
-            if (Input.GetMouseButtonDown(0))
+            bool rightMouse = Input.GetMouseButtonDown(0);
+            bool leftMouse = Input.GetMouseButtonDown(0);
+            bool middleMouse = Input.GetMouseButtonDown(2);
+            if (rightMouse || middleMouse || leftMouse)
             {
                 Tile hitTile = GetHitTile(Input.mousePosition);
                 if (hitTile)
                 {
-                    SelectTile(hitTile);
-                }
-            }
-            if (Input.GetMouseButtonDown(2))
-            {
-                Tile hitTile = GetHitTile(Input.mousePosition);
-                if (hitTile)
-                {
-                    hitTile.Flag();
-                }
-            }
-        }
-        // Update is called once per frame
-        void Update()
-        {
-            MouseOver();
-            UpdateGrid();
-        }
+                    if (rightMouse)
+                    {
+                        SelectTile(hitTile);
+                    }
 
-        void UpdateGrid()
-        {
-            // Store half the size of the grid
-            Vector2 halfSize = new Vector2(width * .5f, height * .5f);
-
-            // Offset
-            Vector2 offset = new Vector2(.5f, .5f);
-
-            // Loop through the entire list of tiles
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    // Generate position for current tile
-                    Vector2 position = new Vector2(x - halfSize.x,
-                                                   y - halfSize.y);
-                    // Offset position to center
-                    position += offset;
-                    // Apply spacing
-                    position *= spacing;
-                    // Spawn a new tile
-                    Tile tile = tiles[x, y];
-                    // Apply new position to Tile
-                    tile.transform.position = position;
+                    if (middleMouse)
+                    {
+                        hitTile.Flag();
+                    }
                 }
             }
         }
